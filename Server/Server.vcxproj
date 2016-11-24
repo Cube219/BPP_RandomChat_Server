@@ -64,9 +64,15 @@
     <RemoteProjectDir>$(RemoteRootDir)/VCPP_LinuxTest/$(ProjectName)</RemoteProjectDir>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="ConnectedClient.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainServer.cpp" />
+    <ClCompile Include="Room.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConnectedClient.h" />
+    <ClInclude Include="MainServer.h" />
+    <ClInclude Include="Room.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
