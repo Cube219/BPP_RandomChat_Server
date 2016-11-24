@@ -1,0 +1,64 @@
+enum MessageType{
+    Message_NULL = 0;
+    Message_Connect = 1;
+    Message_Connect_Result = 2;
+    Message_FindUser = 3;
+    Message_FindUser_Result = 4;
+    Message_SendMessage = 5;
+    Message_SendMessage_Result = 6;
+    Message_GetMessage = 7;
+    Message_LeaveRoom = 8;
+    Message_UserLeaved = 9;
+}
+
+enum ResultCode{
+    Fail = 0;
+    Success = 1;
+    Denied = 2;
+    SendMessageFail_CannotEnteredRoom = 3;
+}
+
+// 서버와 연결
+message Connect{
+}
+// 서버와 연결 결과
+message Connect_Result{
+    required ResultCode result = 1;
+    optional string session = 2;
+}
+
+// 유저 찾기
+message FindUser{
+    required string session = 1;
+}
+// 유저 찾기 결과
+message FindUser_Result{
+    required ResultCode result = 1;
+    optional string userSession = 2;
+}
+
+// 메시지 보냄
+message SendMessage{
+    required string session = 1;
+    required string message = 2;
+}
+// 메시지 보낸 결과
+message SendMessage_Result{
+    required ResultCode result = 1;
+}
+
+// 메시지 받음
+message GetMessage{
+    required string sendUserSession = 1;
+    required string message = 2;
+}
+
+// 방을 나감
+message LeaveRoom{
+    required string session = 1;
+}
+
+// 상대방이 방을 나감
+message UserLeaved{
+    required string leavedUserSession = 1;
+}
