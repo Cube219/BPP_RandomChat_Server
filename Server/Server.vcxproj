@@ -51,6 +51,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>~/CPP_Project</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -61,17 +62,20 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <RemoteProjectDir>$(RemoteRootDir)/VCPP_LinuxTest/$(ProjectName)</RemoteProjectDir>
+    <RemoteProjectDir>$(RemoteRootDir)/BPP_RandomChat/$(ProjectName)</RemoteProjectDir>
+    <SourcePath>$(ProjectDir)Protocol\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="ConnectedClient.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainServer.cpp" />
+    <ClCompile Include="Protocol\Protocol.pb.cc" />
     <ClCompile Include="Room.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConnectedClient.h" />
     <ClInclude Include="MainServer.h" />
+    <ClInclude Include="Protocol\Protocol.pb.h" />
     <ClInclude Include="Room.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
