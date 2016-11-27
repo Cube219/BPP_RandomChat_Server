@@ -17,7 +17,8 @@
 * **Room.cpp**
   * 랜덤으로 매칭된 유저들이 들어가있는 방에 관한 클래스.  
     (A class about a room having the users matched randomly.)
+* **Protocol.cpp**
+  * 서버와 클라이언트 사이의 프로토콜에 관한 클래스.  
+    (A class about a protocol between server and client.)
 
 ## 사용한 라이브러리 (Using Library)
-
-* Google Protocol Buffer (<https://developers.google.com/protocol-buffers/>)

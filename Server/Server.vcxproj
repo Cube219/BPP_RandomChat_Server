@@ -63,22 +63,36 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <RemoteProjectDir>$(RemoteRootDir)/BPP_RandomChat/$(ProjectName)</RemoteProjectDir>
-    <SourcePath>$(ProjectDir)Protocol\;$(SourcePath)</SourcePath>
+    <SourcePath>
+    </SourcePath>
+    <RemoteCCompileToolExe>g++</RemoteCCompileToolExe>
+    <RemoteCppCompileToolExe>g++</RemoteCppCompileToolExe>
+    <RemoteLdToolExe>g++</RemoteLdToolExe>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="ConnectedClient.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainServer.cpp" />
-    <ClCompile Include="Protocol\Protocol.pb.cc" />
+    <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="Room.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConnectedClient.h" />
     <ClInclude Include="MainServer.h" />
-    <ClInclude Include="Protocol\Protocol.pb.h" />
+    <ClInclude Include="Protocol.h" />
     <ClInclude Include="Room.h" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <ClCompile>
+      <CLanguageStandard>gnu11</CLanguageStandard>
+    </ClCompile>
+    <ClCompile>
+      <CppLanguageStandard>gnu++11</CppLanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
