@@ -84,14 +84,24 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>pthread;%(LibraryDependencies)</LibraryDependencies>
+      <ShowProgress>false</ShowProgress>
     </Link>
     <ClCompile>
-      <CLanguageStandard>gnu11</CLanguageStandard>
+      <CLanguageStandard>c11</CLanguageStandard>
     </ClCompile>
     <ClCompile>
-      <CppLanguageStandard>gnu++11</CppLanguageStandard>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
+      <AdditionalOptions>-lpthread %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <RemotePreLinkEvent>
+      <Command>
+      </Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

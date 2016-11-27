@@ -5,6 +5,7 @@
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<net/if.h>
+#include<arpa/inet.h>
 
 #include"ConnectedClient.h"
 
@@ -27,7 +28,7 @@ private:
 
 	unsigned int port;
 	int serverFd, clientFd;
-	sockaddr_in6 serverAddr, clientAddr;
+	sockaddr_in6 serverAddr;
 
 	char buffer[256];
 };

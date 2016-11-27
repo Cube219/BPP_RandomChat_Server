@@ -25,7 +25,7 @@ bool MainServer::Run()
 
 	// 소켓을 염
 	cout << "Opening socket(port : " << port << ")... ";
-	serverFd = socket(PF_INET6, SOCK_STREAM, 0);
+	serverFd = socket(PF_INET6, SOCK_STREAM, IPPROTO_TCP);
 	if(serverFd == -1) { // 여는데 실패
 		cout << "\nFail to open socket!!" << endl;
 		return false;
@@ -55,21 +55,30 @@ bool MainServer::Run()
 	}
 	cout << "Complete!" << endl;
 
-	cout << "Successfuly open the server!" << endl;
+	cout << "\nSuccessfuly open the server!" << endl;
 
 	socklen_t len;
-	len = sizeof(clientAddr);
 	// 클라이언트의 입력을 기다림
 	while(1) {
+		sockaddr_in6 clientAddr;
+		len = sizeof(clientAddr);
 		cout << "Current client Number : " << connectedClients.size() << endl;
 		clientFd = accept(serverFd, (struct sockaddr*)&clientAddr, &len);
-
+		
 		if(clientFd < 0) { // 클라이언트와 연결 실패
 			cout << "Fail to connect client!!" << endl;
 			return false;
 		}
 
 		// connectedClients에 연결된 클라이언트 정보 넣어주고 실행
-		cout << "Client connected (IP : " << ")" << endl;
+		char b[256];
+		inet_ntop(AF_INET6, &clientAddr.sin6_addr, b, sizeof(b));
+		cout << "Client connected (IP : " << b<<")" << endl;
+
+		ConnectedClient* client = new ConnectedClient();
+		client->Init(&clientAddr);
+		client->Run();
+
+		connectedClients.push_back(client);
 	}
 }
