@@ -1,13 +1,14 @@
 #include<iostream>
-//#include"MainServer.h"
+#include"MainServer.h"
 
 using namespace std;
 
 int main()
 {
-	cout << "HI!"<<endl;
-	//MainServer mainServer;
-	//mainServer.Run();
+	MainServer mainServer;
+	mainServer.Init(8888);
+
+	mainServer.Run();
 
     return 0;
 }
