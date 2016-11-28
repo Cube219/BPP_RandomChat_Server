@@ -1,6 +1,9 @@
 #include "ConnectedClient.h"
 
 #include<unistd.h>
+#include<boost/uuid/uuid.hpp>
+#include<boost/uuid/uuid_generators.hpp>
+#include<boost/uuid/uuid_io.hpp>
 
 ConnectedClient::ConnectedClient()
 {
@@ -15,6 +18,10 @@ ConnectedClient::~ConnectedClient()
 void ConnectedClient::Init(sockaddr_in6* addr)
 {
 	clientAddr = addr;
+
+	// 技记 id 积己 (uuid肺 包府)
+	boost::uuids::uuid u = boost::uuids::random_generator()();
+	session = boost::uuids::to_string(u);
 }
 
 // 矫累 窃荐
@@ -27,7 +34,7 @@ void ConnectedClient::Run()
 void ConnectedClient::Receive()
 {
 	while(1) {
-		cout << clientAddr->sin6_port << endl;
+		cout << session << endl;
 		usleep(1000000);
 	}
 }

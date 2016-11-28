@@ -68,6 +68,8 @@
     <RemoteCCompileToolExe>g++</RemoteCCompileToolExe>
     <RemoteCppCompileToolExe>g++</RemoteCppCompileToolExe>
     <RemoteLdToolExe>g++</RemoteLdToolExe>
+    <IncludePath>$(ProjectDir)boost_1_62_0\boost;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)boost_1_62_0</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="ConnectedClient.cpp" />

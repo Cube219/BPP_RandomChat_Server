@@ -1,6 +1,7 @@
 #include "MainServer.h"
 #include<iostream>
 #include<memory.h>
+#include<unistd.h>
 
 MainServer::MainServer()
 {
@@ -57,6 +58,9 @@ bool MainServer::Run()
 
 	cout << "\nSuccessfuly open the server!" << endl;
 
+	// 세션을 체크하는 스레드 생성
+	sessionCheckThread = new thread(&MainServer::CheckSession, this);
+
 	socklen_t len;
 	// 클라이언트의 입력을 기다림
 	while(1) {
@@ -80,5 +84,15 @@ bool MainServer::Run()
 		client->Run();
 
 		connectedClients.push_back(client);
+	}
+}
+
+// 세션을 체크하는 함수
+void MainServer::CheckSession()
+{
+	while(1) {
+		cout << "Checking Session..." << endl;
+		// 10초 간격으로 체크
+		usleep(10000000);
 	}
 }

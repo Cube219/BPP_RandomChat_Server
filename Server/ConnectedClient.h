@@ -3,6 +3,7 @@
 
 #include<thread>
 #include<iostream>
+#include<string>
 using namespace std;
 
 class ConnectedClient
@@ -22,7 +23,7 @@ private:
 	// 클라이언트 정보를 받는 함수
 	void Receive();
 
-	char session[256];
+	string session;
 	sockaddr_in6* clientAddr;
 
 	thread* t;

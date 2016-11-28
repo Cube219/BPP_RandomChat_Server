@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<thread>
 
 #include<sys/types.h>
 #include<sys/socket.h>
@@ -24,7 +25,11 @@ public:
 	bool Run();
 
 private:
+	// 세션을 체크하는 함수
+	void CheckSession();
+
 	vector<ConnectedClient*> connectedClients;
+	thread* sessionCheckThread;
 
 	unsigned int port;
 	int serverFd, clientFd;
