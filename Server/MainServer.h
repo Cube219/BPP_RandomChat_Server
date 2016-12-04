@@ -34,7 +34,7 @@ private:
 	// Client를 list에서 지우는 함수
 	void RemoveClientFromList(ConnectedClient* client);
 
-	list<shared_ptr<ConnectedClient>> connectedClients;
+	list<unique_ptr<ConnectedClient>> connectedClients;
 	thread* sessionCheckThread;
 
 	unsigned int port;

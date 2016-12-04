@@ -79,11 +79,11 @@ bool MainServer::Run()
 		inet_ntop(AF_INET6, &clientAddr.sin6_addr, b, sizeof(b));
 		cout << "Client connected (IP : " << b<<")" << endl;
 
-		shared_ptr<ConnectedClient> client(new ConnectedClient());
+		unique_ptr<ConnectedClient> client(new ConnectedClient());
 		client->Init(clientFd, &clientAddr, std::bind(&MainServer::EndConnection_Callback, this, std::placeholders::_1));
 		client->Run();
 		
-		connectedClients.push_back(client);
+		connectedClients.push_back(std::move(client));
 	}
 }
 
