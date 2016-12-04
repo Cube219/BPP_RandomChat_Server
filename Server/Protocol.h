@@ -1,33 +1,158 @@
-#pragma once
 #include<string>
-
-class Protocol
-{
-public:
-	Protocol();
-	~Protocol();
-
-	template<typename T>
-	char* ToBinary(T message);
-
-	template<typename T>
-	T ToMessage(char* data);
-};
-
+#include<bitset>
+#include<iostream>
+#include"json/json.h"
 // 메시지들 정의
-struct Message_Connect
+
+enum ResultCode
 {
-	char* ToBinardy(Message_Connect message)
+	Sucess = 1,
+	Fail = 2,
+	FailToParseJson = 98
+};
+
+// 1. 연결
+struct Protocol_Connect
+{
+	static std::string ToJson(Protocol_Connect protocol, int& size)
 	{
+		char* b = new char[1];
+		size = 1;
+
+		return b;
 	}
 
-	Message_Connect ToMessage(char* data)
+	static Protocol_Connect ToProtocol(std::string data)
 	{
+		Protocol_Connect p;
+		return p;
+	}
+};
+// 2. 연결 결과
+struct Protocol_ConnectResult
+{
+	ResultCode resultCode;
+	std::string session;
+
+	static std::string ToJson(Protocol_ConnectResult protocol, int& size)
+	{
+
+	}
+
+	static Protocol_ConnectResult ToProtocol(std::string data)
+	{
+
 	}
 };
 
-struct Message_ConnectResult
+// 3. 유저를 찾음
+struct Protocol_FindUser
 {
-	unsigned int resultCode;
 	std::string session;
+
+	static std::string ToJson(Protocol_FindUser protocol, int& size)
+	{
+
+	}
+
+	static Protocol_FindUser ToProtocol(std::string data)
+	{
+
+	}
+};
+// 4. 유저를 찾은 결과
+struct Protocol_FindUserResult
+{
+	ResultCode resultCode;
+	std::string userSession;
+
+	static std::string ToJson(Protocol_FindUserResult protocol, int& size)
+	{
+
+	}
+
+	static Protocol_FindUserResult ToProtocol(std::string data)
+	{
+
+	}
+};
+
+// 5. 메시지를 보냄
+struct Protocol_SendMessage
+{
+	std::string session;
+	std::wstring message;
+
+	static std::string ToJson(Protocol_SendMessage protocol, int& size)
+	{
+
+	}
+
+	static Protocol_SendMessage ToProtocol(std::string data)
+	{
+
+	}
+};
+// 6. 메시지를 보낸 결과
+struct Protocol_SendMessageResult
+{
+	ResultCode resultCode;
+
+	static std::string ToJson(Protocol_SendMessageResult protocol, int& size)
+	{
+
+	}
+
+	static Protocol_SendMessageResult ToProtocol(std::string data)
+	{
+
+	}
+};
+
+// 7. 메시지를 받음
+struct Protocol_GetMessage
+{
+	std::string sendUserSession;
+	std::wstring message;
+
+	static std::string ToJson(Protocol_GetMessage protocol, int& size)
+	{
+
+	}
+
+	static Protocol_GetMessage ToProtocol(std::string data)
+	{
+
+	}
+};
+
+// 8. 방을 나감
+struct Protocol_LeaveRoom
+{
+	std::string session;
+
+	static std::string ToJson(Protocol_LeaveRoom protocol, int& size)
+	{
+
+	}
+
+	static Protocol_LeaveRoom ToProtocol(std::string data)
+	{
+
+	}
+};
+// 9. 상대방이 방을 나감
+struct Protocol_UserLeaved
+{
+	std::string leavedUserSession;
+
+	static std::string ToJson(Protocol_UserLeaved protocol, int& size)
+	{
+
+	}
+
+	static Protocol_UserLeaved ToProtocol(std::string data)
+	{
+
+	}
 };
