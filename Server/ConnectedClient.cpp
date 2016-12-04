@@ -66,3 +66,9 @@ void ConnectedClient::Send()
 {
 
 }
+
+// 세션이 만료되었는가?
+bool ConnectedClient::isSessionExpired()
+{
+	return false;
+}

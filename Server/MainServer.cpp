@@ -92,13 +92,33 @@ void MainServer::CheckSession()
 {
 	while(1) {
 		cout << "Checking Session..." << endl;
-		// 10초 간격으로 체크
-		usleep(10000000);
+
+		bool isExpiredAnyOfThem = false;
+
+		// 만료된 세션 제거
+		for(auto it = connectedClients.begin(); it != connectedClients.end(); it++) {
+			if(it->get()->isSessionExpired() == true) {
+				RemoveClientFromList(it->get());
+				isExpiredAnyOfThem = true;
+				break;
+			}
+		}
+
+		// 만약 만료된 것이 없으면 10초 뒤에 다시 체크
+		if(isExpiredAnyOfThem == false) {
+			usleep(10000000);
+		}
 	}
 }
 
 // Client의 접속이 종료되었음을 알리는 Callback 함수
 void MainServer::EndConnection_Callback(ConnectedClient* client)
+{
+	RemoveClientFromList(client);
+}
+
+// Client를 list에서 지우는 함수
+void MainServer::RemoveClientFromList(ConnectedClient* client)
 {
 	// 해당 클라이언트 connectedClients에서 제거
 	for(auto it = connectedClients.begin(); it != connectedClients.end(); it++) {

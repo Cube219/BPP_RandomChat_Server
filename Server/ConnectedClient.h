@@ -19,8 +19,12 @@ public:
 
 	// 시작 함수
 	void Run();
+
 	// 클라이언트에게 데이터를 보내는 함수
 	void Send();
+
+	// 세션이 만료되었는지 확인하는 함수
+	bool isSessionExpired();
 
 private:
 

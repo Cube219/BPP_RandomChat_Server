@@ -31,6 +31,9 @@ private:
 	// Client의 접속이 종료되었음을 알리는 Callback 함수
 	void EndConnection_Callback(ConnectedClient* client);
 
+	// Client를 list에서 지우는 함수
+	void RemoveClientFromList(ConnectedClient* client);
+
 	list<shared_ptr<ConnectedClient>> connectedClients;
 	thread* sessionCheckThread;
 
