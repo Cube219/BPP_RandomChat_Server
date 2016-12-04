@@ -1,4 +1,4 @@
-#include "ConnectedClient.h"
+ï»¿#include "ConnectedClient.h"
 
 #include<unistd.h>
 #include<boost/uuid/uuid.hpp>
@@ -14,27 +14,55 @@ ConnectedClient::~ConnectedClient()
 {
 }
 
-// ÃÊ±âÈ­ ÇÔ¼ö
-void ConnectedClient::Init(sockaddr_in6* addr)
+// ì´ˆê¸°í™” í•¨ìˆ˜
+void ConnectedClient::Init(int fd, sockaddr_in6* addr, std::function<void(ConnectedClient*)> endConnectionCallback)
 {
+	clientFd = fd;
 	clientAddr = addr;
+	this->endConnectionCallback = endConnectionCallback;
 
-	// ¼¼¼Ç id »ı¼º (uuid·Î °ü¸®)
+	// ì„¸ì…˜ id ìƒì„± (uuidë¡œ ê´€ë¦¬)
 	boost::uuids::uuid u = boost::uuids::random_generator()();
 	session = boost::uuids::to_string(u);
 }
 
-// ½ÃÀÛ ÇÔ¼ö
+// ì‹œì‘ í•¨ìˆ˜
 void ConnectedClient::Run()
 {
-	// ÇØ´ç Å¬¶óÀÌ¾ğÆ®ÀÇ µ¥ÀÌÅÍ Á¢¼ÓÀ» ´ã´çÇÒ ½º·¹µå »ı¼º
+	// í•´ë‹¹ í´ë¼ì´ì–¸íŠ¸ì˜ ë°ì´í„° ì ‘ì†ì„ ë‹´ë‹¹í•  ìŠ¤ë ˆë“œ ìƒì„±
 	t = new thread(&ConnectedClient::Receive, this);
 }
-// Å¬¶óÀÌ¾ğÆ® Á¤º¸¸¦ ¹Ş´Â ÇÔ¼ö
+// í´ë¼ì´ì–¸íŠ¸ë¡œë¶€í„° ë°ì´í„°ë¥¼ ë°›ëŠ” í•¨ìˆ˜
 void ConnectedClient::Receive()
 {
+	char buffer[256];
 	while(1) {
-		cout << session << endl;
-		usleep(1000000);
+		// recví•¨ìˆ˜ë¡œ í´ë¼ì´ì–¸íŠ¸ë¡œë¶€í„° ì˜¤ëŠ” ë°ì´í„° ë°›ìŒ
+		int receiveSize = recv(clientFd, buffer, sizeof(buffer), 0);
+
+		if(receiveSize <= 0) { // Connection ì¢…ë£Œë¨
+			std::cout << "End connection. (" << session << ")" << endl;
+			break;
+		}
+
+		// ë°›ì€ ë‚´ìš©ì„ ë¶„ì„
+		Process(buffer, receiveSize);
 	}
+
+	// ì†Œì¼“ ë‹«ìŒ
+	close(clientFd);
+	// ì—°ê²° ì¢…ë£Œ Callbackí•¨ìˆ˜ í˜¸ì¶œ
+	endConnectionCallback(this);
+}
+
+// ë‚´ìš©ì„ ë¶„ì„í•˜ëŠ” í•¨ìˆ˜
+void ConnectedClient::Process(char* buf, int bufSize)
+{
+	std::cout << buf << endl;
+}
+
+// í´ë¼ì´ì–¸íŠ¸ì—ê²Œ ë°ì´í„°ë¥¼ ë³´ë‚´ëŠ” í•¨ìˆ˜
+void ConnectedClient::Send()
+{
+
 }

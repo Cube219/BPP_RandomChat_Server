@@ -1,4 +1,4 @@
-#include "MainServer.h"
+ï»¿#include "MainServer.h"
 #include<iostream>
 #include<memory.h>
 #include<unistd.h>
@@ -12,28 +12,28 @@ MainServer::~MainServer()
 {
 }
 
-// ¼³Á¤À» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+// ì„¤ì •ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
 void MainServer::Init(unsigned int port)
 {
 	this->port = port;
 }
 
-// ¼­¹ö¸¦ ½ÇÇàÇÏ´Â ÇÔ¼ö
+// ì„œë²„ë¥¼ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
 bool MainServer::Run()
 {
 	cout << "Starting RandomChat server..." << endl;
 	cout << endl;
 
-	// ¼ÒÄÏÀ» ¿°
+	// ì†Œì¼“ì„ ì—¼
 	cout << "Opening socket(port : " << port << ")... ";
 	serverFd = socket(PF_INET6, SOCK_STREAM, IPPROTO_TCP);
-	if(serverFd == -1) { // ¿©´Âµ¥ ½ÇÆĞ
+	if(serverFd == -1) { // ì—¬ëŠ”ë° ì‹¤íŒ¨
 		cout << "\nFail to open socket!!" << endl;
 		return false;
 	}
 	cout << "Complete!" << endl;
 
-	//serverAddr ¼ÂÆÃ
+	//serverAddr ì…‹íŒ…
 	serverAddr.sin6_family = AF_INET6;
 	serverAddr.sin6_flowinfo = 0;
 	serverAddr.sin6_port = htons(port);
@@ -58,41 +58,55 @@ bool MainServer::Run()
 
 	cout << "\nSuccessfuly open the server!" << endl;
 
-	// ¼¼¼ÇÀ» Ã¼Å©ÇÏ´Â ½º·¹µå »ı¼º
+	// ì„¸ì…˜ì„ ì²´í¬í•˜ëŠ” ìŠ¤ë ˆë“œ ìƒì„±
 	sessionCheckThread = new thread(&MainServer::CheckSession, this);
 
 	socklen_t len;
-	// Å¬¶óÀÌ¾ğÆ®ÀÇ ÀÔ·ÂÀ» ±â´Ù¸²
+	// í´ë¼ì´ì–¸íŠ¸ì˜ ì…ë ¥ì„ ê¸°ë‹¤ë¦¼
 	while(1) {
 		sockaddr_in6 clientAddr;
 		len = sizeof(clientAddr);
 		cout << "Current client Number : " << connectedClients.size() << endl;
 		clientFd = accept(serverFd, (struct sockaddr*)&clientAddr, &len);
 		
-		if(clientFd < 0) { // Å¬¶óÀÌ¾ğÆ®¿Í ¿¬°á ½ÇÆĞ
+		if(clientFd < 0) { // í´ë¼ì´ì–¸íŠ¸ì™€ ì—°ê²° ì‹¤íŒ¨
 			cout << "Fail to connect client!!" << endl;
 			return false;
 		}
 
-		// connectedClients¿¡ ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ® Á¤º¸ ³Ö¾îÁÖ°í ½ÇÇà
+		// connectedClientsì— ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ ì •ë³´ ë„£ì–´ì£¼ê³  ì‹¤í–‰
 		char b[256];
 		inet_ntop(AF_INET6, &clientAddr.sin6_addr, b, sizeof(b));
 		cout << "Client connected (IP : " << b<<")" << endl;
 
-		ConnectedClient* client = new ConnectedClient();
-		client->Init(&clientAddr);
+		shared_ptr<ConnectedClient> client(new ConnectedClient());
+		client->Init(clientFd, &clientAddr, std::bind(&MainServer::EndConnection_Callback, this, std::placeholders::_1));
 		client->Run();
-
+		
 		connectedClients.push_back(client);
 	}
 }
 
-// ¼¼¼ÇÀ» Ã¼Å©ÇÏ´Â ÇÔ¼ö
+// ì„¸ì…˜ì„ ì²´í¬í•˜ëŠ” í•¨ìˆ˜
 void MainServer::CheckSession()
 {
 	while(1) {
 		cout << "Checking Session..." << endl;
-		// 10ÃÊ °£°İÀ¸·Î Ã¼Å©
+		// 10ì´ˆ ê°„ê²©ìœ¼ë¡œ ì²´í¬
 		usleep(10000000);
 	}
+}
+
+// Clientì˜ ì ‘ì†ì´ ì¢…ë£Œë˜ì—ˆìŒì„ ì•Œë¦¬ëŠ” Callback í•¨ìˆ˜
+void MainServer::EndConnection_Callback(ConnectedClient* client)
+{
+	// í•´ë‹¹ í´ë¼ì´ì–¸íŠ¸ connectedClientsì—ì„œ ì œê±°
+	for(auto it = connectedClients.begin(); it != connectedClients.end(); it++) {
+		if(it->get() == client) {
+			connectedClients.erase(it);
+			break;
+		}
+	}
+
+	cout << "Current client Number : " << connectedClients.size() << endl;
 }

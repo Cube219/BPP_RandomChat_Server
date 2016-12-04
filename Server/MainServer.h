@@ -1,5 +1,5 @@
-#pragma once
-#include<vector>
+ï»¿#pragma once
+#include<list>
 #include<thread>
 
 #include<sys/types.h>
@@ -18,17 +18,20 @@ public:
 	MainServer();
 	~MainServer();
 
-	// ¼³Á¤À» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+	// ì„¤ì •ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
 	void Init(unsigned int port);
 
-	// ¼­¹ö¸¦ ½ÇÇàÇÏ´Â ÇÔ¼ö
+	// ì„œë²„ë¥¼ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
 	bool Run();
 
 private:
-	// ¼¼¼ÇÀ» Ã¼Å©ÇÏ´Â ÇÔ¼ö
+	// ì„¸ì…˜ì„ ì²´í¬í•˜ëŠ” í•¨ìˆ˜
 	void CheckSession();
 
-	vector<ConnectedClient*> connectedClients;
+	// Clientì˜ ì ‘ì†ì´ ì¢…ë£Œë˜ì—ˆìŒì„ ì•Œë¦¬ëŠ” Callback í•¨ìˆ˜
+	void EndConnection_Callback(ConnectedClient* client);
+
+	list<shared_ptr<ConnectedClient>> connectedClients;
 	thread* sessionCheckThread;
 
 	unsigned int port;
