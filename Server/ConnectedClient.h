@@ -1,10 +1,5 @@
 ﻿#pragma once
-#include<netinet/in.h>
-
-#include<thread>
-#include<iostream>
-#include<string>
-#include<functional>
+#include"PCH_ConnectedClient.h"
 
 using namespace std;
 
