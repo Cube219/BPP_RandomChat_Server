@@ -16,7 +16,8 @@ public:
 	void Run();
 
 	// 클라이언트에게 데이터를 보내는 함수
-	void Send();
+	void Send(const char* data, int dataSize);
+	void Send(string data);
 
 	// 세션이 만료되었는지 확인하는 함수
 	bool isSessionExpired();
@@ -26,7 +27,7 @@ private:
 	// 클라이언트로부터 데이터를 받는 함수
 	void Receive();
 	// 내용을 분석하는 함수
-	void Process(char* buf, int bufSize);
+	void Process(const char* buf, int bufSize);
 
 	//void(MainServer::*endConnectionCallback)(ConnectedClient*);
 	std::function<void(ConnectedClient*)> endConnectionCallback;

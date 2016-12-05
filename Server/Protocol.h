@@ -1,8 +1,9 @@
+Ôªø#pragma once
 #include<string>
 #include<bitset>
 #include<iostream>
 #include"json.hpp"
-// ∏ﬁΩ√¡ˆµÈ ¡§¿«
+// Î©îÏãúÏßÄÎì§ Ï†ïÏùò
 
 using json = nlohmann::json;
 
@@ -13,281 +14,90 @@ enum ResultCode
 	FailToParseJson = 98
 };
 
-// 1. ø¨∞·
+// 1. Ïó∞Í≤∞
 struct Protocol_Connect
 {
-	static std::string ToJson(Protocol_Connect protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_Connect";
+	static std::string ToJson(Protocol_Connect protocol);
 
-		j["data"] = "";
-
-		return j.dump();
-	}
-
-	static Protocol_Connect ToProtocol(std::string data)
-	{
-		Protocol_Connect p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_Connect") {
-			return p;
-		}
-
-		return p;
-	}
+	static Protocol_Connect ToProtocol(std::string data);
 };
-// 2. ø¨∞· ∞·∞˙
+// 2. Ïó∞Í≤∞ Í≤∞Í≥º
 struct Protocol_ConnectResult
 {
 	ResultCode resultCode;
 	std::string session;
 
-	static std::string ToJson(Protocol_ConnectResult protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_ConnectResult";
+	static std::string ToJson(Protocol_ConnectResult protocol);
 
-		j["data"]["resultCode"] = static_cast<int>(protocol.resultCode);
-		j["data"]["session"] = protocol.session;
-
-		return j.dump();
-	}
-
-	static Protocol_ConnectResult ToProtocol(std::string data)
-	{
-		Protocol_ConnectResult p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_ConnectResult") {
-			return p;
-		}
-
-		int c = j["data"]["resultCode"];
-		p.resultCode = static_cast<ResultCode>(c);
-		p.session = j["data"]["session"];
-
-		return p;
-	}
+	static Protocol_ConnectResult ToProtocol(std::string data);
 };
 
-// 3. ¿Ø¿˙∏¶ √£¿Ω
+// 3. Ïú†Ï†ÄÎ•º Ï∞æÏùå
 struct Protocol_FindUser
 {
 	std::string session;
 
-	static std::string ToJson(Protocol_FindUser protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_FindUser";
+	static std::string ToJson(Protocol_FindUser protocol);
 
-		j["data"]["session"] = protocol.session;
-
-		return j.dump();
-	}
-
-	static Protocol_FindUser ToProtocol(std::string data)
-	{
-		Protocol_FindUser p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_FindUser") {
-			return p;
-		}
-
-		p.session = j["data"]["session"];
-
-		return p;
-	}
+	static Protocol_FindUser ToProtocol(std::string data);
 };
-// 4. ¿Ø¿˙∏¶ √£¿∫ ∞·∞˙
+// 4. Ïú†Ï†ÄÎ•º Ï∞æÏùÄ Í≤∞Í≥º
 struct Protocol_FindUserResult
 {
 	ResultCode resultCode;
 	std::string userSession;
 
-	static std::string ToJson(Protocol_FindUserResult protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_FindUserResult";
+	static std::string ToJson(Protocol_FindUserResult protocol);
 
-		j["data"]["resultCode"] = static_cast<int>(protocol.resultCode);
-		j["data"]["userSession"] = protocol.userSession;
-
-		return j.dump();
-	}
-
-	static Protocol_FindUserResult ToProtocol(std::string data)
-	{
-		Protocol_FindUserResult p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_FindUserResult") {
-			return p;
-		}
-
-		int c = j["data"]["resultCode"];
-		p.resultCode = static_cast<ResultCode>(c);
-		p.userSession = j["data"]["userSession"];
-
-		return p;
-	}
+	static Protocol_FindUserResult ToProtocol(std::string data);
 };
 
-// 5. ∏ﬁΩ√¡ˆ∏¶ ∫∏≥ø
+// 5. Î©îÏãúÏßÄÎ•º Î≥¥ÎÉÑ
 struct Protocol_SendMessage
 {
 	std::string session;
 	std::wstring message;
 
-	static std::string ToJson(Protocol_SendMessage protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_SendMessage";
+	static std::string ToJson(Protocol_SendMessage protocol);
 
-		j["data"]["session"] = protocol.session;
-		j["data"]["message"] = protocol.message;
-
-		return j.dump();
-	}
-
-	static Protocol_SendMessage ToProtocol(std::string data)
-	{
-		Protocol_SendMessage p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_SendMessage") {
-			return p;
-		}
-
-		p.session = j["data"]["session"];
-		std::wstring t = j["data"]["message"];
-		p.message = t;
-
-		return p;
-	}
+	static Protocol_SendMessage ToProtocol(std::string data);
 };
-// 6. ∏ﬁΩ√¡ˆ∏¶ ∫∏≥Ω ∞·∞˙
+// 6. Î©îÏãúÏßÄÎ•º Î≥¥ÎÇ∏ Í≤∞Í≥º
 struct Protocol_SendMessageResult
 {
 	ResultCode resultCode;
 
-	static std::string ToJson(Protocol_SendMessageResult protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_SendMessageResult";
+	static std::string ToJson(Protocol_SendMessageResult protocol);
 
-		j["data"]["resultCode"] = static_cast<int>(protocol.resultCode);
-
-		return j.dump();
-	}
-
-	static Protocol_SendMessageResult ToProtocol(std::string data)
-	{
-		Protocol_SendMessageResult p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_SendMessageResult") {
-			return p;
-		}
-
-		int c = j["data"]["resultCode"];
-		p.resultCode = static_cast<ResultCode>(c);
-
-		return p;
-	}
+	static Protocol_SendMessageResult ToProtocol(std::string data);
 };
 
-// 7. ∏ﬁΩ√¡ˆ∏¶ πﬁ¿Ω
+// 7. Î©îÏãúÏßÄÎ•º Î∞õÏùå
 struct Protocol_GetMessage
 {
 	std::string sendUserSession;
 	std::wstring message;
 
-	static std::string ToJson(Protocol_GetMessage protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_GetMessage";
+	static std::string ToJson(Protocol_GetMessage protocol);
 
-		j["data"]["sendUserSession"] = protocol.sendUserSession;
-		j["data"]["message"] = protocol.message;
-
-		return j.dump();
-	}
-
-	static Protocol_GetMessage ToProtocol(std::string data)
-	{
-		Protocol_GetMessage p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_GetMessage") {
-			return p;
-		}
-
-		p.sendUserSession = j["data"]["sendUserSession"];
-		std::wstring t = j["data"]["message"];
-		p.message = t;
-
-		return p;
-	}
+	static Protocol_GetMessage ToProtocol(std::string data);
 };
 
-// 8. πÊ¿ª ≥™∞®
+// 8. Î∞©ÏùÑ ÎÇòÍ∞ê
 struct Protocol_LeaveRoom
 {
 	std::string session;
 
-	static std::string ToJson(Protocol_LeaveRoom protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_LeaveRoom";
+	static std::string ToJson(Protocol_LeaveRoom protocol);
 
-		j["data"]["session"] = protocol.session;
-
-		return j.dump();
-	}
-
-	static Protocol_LeaveRoom ToProtocol(std::string data)
-	{
-		Protocol_LeaveRoom p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_LeaveRoom") {
-			return p;
-		}
-
-		p.session = j["data"]["session"];
-
-		return p;
-	}
+	static Protocol_LeaveRoom ToProtocol(std::string data);
 };
-// 9. ªÛ¥ÎπÊ¿Ã πÊ¿ª ≥™∞®
+// 9. ÏÉÅÎåÄÎ∞©Ïù¥ Î∞©ÏùÑ ÎÇòÍ∞ê
 struct Protocol_UserLeaved
 {
 	std::string leavedUserSession;
 
-	static std::string ToJson(Protocol_UserLeaved protocol, int& size)
-	{
-		json j;
-		j["protocolType"] = "Protocol_UserLeaved";
+	static std::string ToJson(Protocol_UserLeaved protocol);
 
-		j["data"]["leavedUserSession"] = protocol.leavedUserSession;
-
-		return j.dump();
-	}
-
-	static Protocol_UserLeaved ToProtocol(std::string data)
-	{
-		Protocol_UserLeaved p;
-
-		json j = json::parse(data);
-		if(j["protocolType"] != "Protocol_UserLeaved") {
-			return p;
-		}
-
-		p.leavedUserSession = j["data"]["leavedUserSession"];
-
-		return p;
-	}
+	static Protocol_UserLeaved ToProtocol(std::string data);
 };

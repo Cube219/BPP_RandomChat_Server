@@ -27,6 +27,13 @@ void ConnectedClient::Run()
 {
 	// 해당 클라이언트의 데이터 접속을 담당할 스레드 생성
 	t = new thread(&ConnectedClient::Receive, this);
+
+	// 클라이언트에게 Session값 보내줌
+	Protocol_ConnectResult p;
+	p.resultCode = ResultCode::Sucess;
+	p.session = session;
+	string j = p.ToJson(p);
+	Send(j);
 }
 // 클라이언트로부터 데이터를 받는 함수
 void ConnectedClient::Receive()
@@ -34,7 +41,7 @@ void ConnectedClient::Receive()
 	char buffer[256];
 	while(1) {
 		// recv함수로 클라이언트로부터 오는 데이터 받음
-		int receiveSize = recv(clientFd, buffer, sizeof(buffer), 0);
+		int receiveSize = (int)recv(clientFd, buffer, sizeof(buffer), 0);
 
 		if(receiveSize <= 0) { // Connection 종료됨
 			std::cout << "End connection. (" << session << ")" << endl;
@@ -52,15 +59,20 @@ void ConnectedClient::Receive()
 }
 
 // 내용을 분석하는 함수
-void ConnectedClient::Process(char* buf, int bufSize)
+void ConnectedClient::Process(const char* buf, int bufSize)
 {
 	std::cout << buf << endl;
 }
 
 // 클라이언트에게 데이터를 보내는 함수
-void ConnectedClient::Send()
+void ConnectedClient::Send(const char* data, int dataSize)
 {
-
+	send(clientFd, data, dataSize, 0);
+	//delete data;
+}
+void ConnectedClient::Send(string string)
+{
+	Send(string.c_str(), (int)string.size() + 1);
 }
 
 // 세션이 만료되었는가?

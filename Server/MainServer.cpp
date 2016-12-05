@@ -36,7 +36,7 @@ bool MainServer::Run()
 	//serverAddr 셋팅
 	serverAddr.sin6_family = AF_INET6;
 	serverAddr.sin6_flowinfo = 0;
-	serverAddr.sin6_port = htons(port);
+	serverAddr.sin6_port = htons((uint16_t)port);
 	serverAddr.sin6_addr = in6addr_any;
 	//serverAddr.sin6_scope_id = if_nametoindex("etho");
 
