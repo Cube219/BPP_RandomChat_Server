@@ -13,7 +13,7 @@ std::string Protocol_Connect::ToJson(const Protocol_Connect& protocol)
 
 Protocol_Connect Protocol_Connect::ToProtocol(const std::string& data)
 {
-	Protocol_Connect p;
+	Protocol_Connect p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_Connect") {
@@ -36,7 +36,7 @@ std::string Protocol_ConnectResult::ToJson(const Protocol_ConnectResult& protoco
 
 Protocol_ConnectResult Protocol_ConnectResult::ToProtocol(const std::string& data)
 {
-	Protocol_ConnectResult p;
+	Protocol_ConnectResult p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_ConnectResult") {
@@ -63,7 +63,7 @@ std::string Protocol_FindUser::ToJson(const Protocol_FindUser& protocol)
 
 Protocol_FindUser Protocol_FindUser::ToProtocol(const std::string& data)
 {
-	Protocol_FindUser p;
+	Protocol_FindUser p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_FindUser") {
@@ -88,7 +88,7 @@ std::string Protocol_FindUserResult::ToJson(const Protocol_FindUserResult& proto
 
 Protocol_FindUserResult Protocol_FindUserResult::ToProtocol(const std::string& data)
 {
-	Protocol_FindUserResult p;
+	Protocol_FindUserResult p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_FindUserResult") {
@@ -117,7 +117,7 @@ std::string Protocol_SendMessage::ToJson(const Protocol_SendMessage& protocol)
 
 Protocol_SendMessage Protocol_SendMessage::ToProtocol(const std::string& data)
 {
-	Protocol_SendMessage p;
+	Protocol_SendMessage p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_SendMessage") {
@@ -143,7 +143,7 @@ std::string Protocol_SendMessageResult::ToJson(const Protocol_SendMessageResult&
 
 Protocol_SendMessageResult Protocol_SendMessageResult::ToProtocol(const std::string& data)
 {
-	Protocol_SendMessageResult p;
+	Protocol_SendMessageResult p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_SendMessageResult") {
@@ -170,7 +170,7 @@ std::string Protocol_GetMessage::ToJson(const Protocol_GetMessage& protocol)
 
 Protocol_GetMessage Protocol_GetMessage::ToProtocol(const std::string& data)
 {
-	Protocol_GetMessage p;
+	Protocol_GetMessage p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_GetMessage") {
@@ -197,7 +197,7 @@ std::string Protocol_LeaveRoom::ToJson(const Protocol_LeaveRoom& protocol)
 
 Protocol_LeaveRoom Protocol_LeaveRoom::ToProtocol(const std::string& data)
 {
-	Protocol_LeaveRoom p;
+	Protocol_LeaveRoom p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_LeaveRoom") {
@@ -221,7 +221,7 @@ std::string Protocol_UserLeaved::ToJson(const Protocol_UserLeaved& protocol)
 
 Protocol_UserLeaved Protocol_UserLeaved::ToProtocol(const std::string& data)
 {
-	Protocol_UserLeaved p;
+	Protocol_UserLeaved p = {};
 
 	json j = json::parse(data);
 	if(j["protocolType"] != "Protocol_UserLeaved") {
