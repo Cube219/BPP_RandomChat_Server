@@ -70,7 +70,7 @@ void ConnectedClient::Send(const char* data, int dataSize)
 	send(clientFd, data, dataSize, 0);
 	//delete data;
 }
-void ConnectedClient::Send(string string)
+void ConnectedClient::Send(const string& string)
 {
 	Send(string.c_str(), (int)string.size() + 1);
 }
