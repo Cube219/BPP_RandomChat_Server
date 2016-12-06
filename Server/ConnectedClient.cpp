@@ -28,6 +28,9 @@ void ConnectedClient::Run()
 	// 해당 클라이언트의 데이터 접속을 담당할 스레드 생성
 	t = new thread(&ConnectedClient::Receive, this);
 
+	// 마지막 세션 값 셋팅
+	lastSessionTime = std::time(nullptr);
+
 	// 클라이언트에게 Session값 보내줌
 	Protocol_ConnectResult p;
 	p.resultCode = ResultCode::Sucess;
@@ -78,5 +81,14 @@ void ConnectedClient::Send(const string& string)
 // 세션이 만료되었는가?
 bool ConnectedClient::isSessionExpired()
 {
+	/*
+	time_t currentTime = std::time(nullptr);
+	
+	// 만약 마지막 세션갱신시간에서 5분(300초)가 지난 경우 세션이 만료됨
+	if(currentTime - lastSessionTime >= 10)
+		return true;
+	else
+		return false;
+		*/
 	return false;
 }

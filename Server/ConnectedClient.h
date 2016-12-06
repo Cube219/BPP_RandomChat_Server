@@ -33,6 +33,7 @@ private:
 	std::function<void(ConnectedClient*)> endConnectionCallback;
 
 	string session;
+	time_t lastSessionTime;
 
 	int clientFd;
 	sockaddr_in6* clientAddr;
