@@ -1,7 +1,10 @@
 ﻿#pragma once
 #include"PCH_ConnectedClient.h"
+#include"Room.h"
 
 using namespace std;
+
+class MainServer;
 
 class ConnectedClient
 {
@@ -11,7 +14,7 @@ public:
 	~ConnectedClient();
 
 	// 초기화 함수
-	void Init(int fd, sockaddr_in6* addr, std::function<void(ConnectedClient*)> endConnectionCallback);
+	void Init(MainServer* mainServer, int fd, sockaddr_in6* addr, std::function<void(ConnectedClient*)> endConnectionCallback);
 
 	// 시작 함수
 	void Run();
@@ -23,10 +26,22 @@ public:
 	// 세션이 만료되었는지 확인하는 함수
 	bool isSessionExpired();
 
+	// 방에 들어왔다는 것을 알리는 함수
+	void EnterRoom(Room* room);
+
 	// 현재 상태를 가져오는 함수
 	State GetState();
 
+	// 현재 상태를 변경하는 함수
+	void SetState(State state);
+
+	// 세션을 가져오는 함수
+	string GetSession();
+
 private:
+
+	MainServer* mainSever;
+	Room* room;
 
 	// 클라이언트로부터 데이터를 받는 함수
 	void Receive();

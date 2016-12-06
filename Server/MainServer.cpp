@@ -61,6 +61,9 @@ bool MainServer::Run()
 	// 세션을 체크하는 스레드 생성
 	sessionCheckThread = new thread(&MainServer::CheckSession, this);
 
+	// 방을 만들어야하는지 체크하는 스레드 생성
+	checkMakingRoomThread = new thread(&MainServer::CheckMakingRoom, this);
+
 	socklen_t len;
 	// 클라이언트의 입력을 기다림
 	while(1) {
@@ -79,20 +82,24 @@ bool MainServer::Run()
 		inet_ntop(AF_INET6, &clientAddr.sin6_addr, b, sizeof(b));
 		cout << "Client connected (IP : " << b<<")" << endl;
 
-		unique_ptr<ConnectedClient> client(new ConnectedClient());
-		client->Init(clientFd, &clientAddr, std::bind(&MainServer::EndConnection_Callback, this, std::placeholders::_1));
+		shared_ptr<ConnectedClient> client(new ConnectedClient());
+		client->Init(this, clientFd, &clientAddr, std::bind(&MainServer::EndConnection_Callback, this, std::placeholders::_1));
 		client->Run();
 		
-		connectedClients.push_back(std::move(client));
+		connectedClients.push_back(client);
 	}
+}
+
+// serachingQueue에다가 클라이언트를 넣는 함수
+void MainServer::AddClientInSearchingQueue(ConnectedClient* client)
+{
+	searchingQueue.push(client);
 }
 
 // 세션을 체크하는 함수
 void MainServer::CheckSession()
 {
 	while(1) {
-		cout << "Checking Session..." << endl;
-
 		bool isExpiredAnyOfThem = false;
 
 		// 만료된 세션 제거
@@ -108,6 +115,28 @@ void MainServer::CheckSession()
 		if(isExpiredAnyOfThem == false) {
 			usleep(10000000);
 		}
+	}
+}
+
+// 방을 만들어야하는지 체크하는 함수
+void MainServer::CheckMakingRoom()
+{
+	while(1) {
+		if(searchingQueue.size() >= 2) {
+			ConnectedClient* c1 = searchingQueue.front();
+			searchingQueue.pop();
+			ConnectedClient* c2 = searchingQueue.front();
+			searchingQueue.pop();
+
+			unique_ptr<Room> r(new Room(this, c1, c2));
+			rooms.push_back(std::move(r));
+
+			cout << "Room is made" << endl;
+			cout << "Current Room num: " << rooms.size() << endl;
+		}
+
+		// 0.1초 간격으로 체크
+		usleep(1000000);
 	}
 }
 
@@ -129,4 +158,17 @@ void MainServer::RemoveClientFromList(ConnectedClient* client)
 	}
 
 	cout << "Current client Number : " << connectedClients.size() << endl;
+}
+
+// Room을 list에서 지우는 함수
+void MainServer::RemoveRoomFromList(Room* room)
+{
+	for(auto it = rooms.begin(); it != rooms.end(); it++) {
+		if(it->get() == room) {
+			rooms.erase(it);
+			cout << "Room is removed" << endl;
+			cout << "Current Room num: " << rooms.size() << endl;
+			break;
+		}
+	}
 }

@@ -1,5 +1,5 @@
 ﻿#include "ConnectedClient.h"
-
+#include"MainServer.h"
 
 ConnectedClient::ConnectedClient()
 {
@@ -11,8 +11,9 @@ ConnectedClient::~ConnectedClient()
 }
 
 // 초기화 함수
-void ConnectedClient::Init(int fd, sockaddr_in6* addr, std::function<void(ConnectedClient*)> endConnectionCallback)
+void ConnectedClient::Init(MainServer* mainServer, int fd, sockaddr_in6* addr, std::function<void(ConnectedClient*)> endConnectionCallback)
 {
+	this->mainSever = mainServer;
 	clientFd = fd;
 	clientAddr = addr;
 	this->endConnectionCallback = endConnectionCallback;
@@ -49,6 +50,7 @@ void ConnectedClient::Receive()
 		int receiveSize = (int)recv(clientFd, buffer, sizeof(buffer), 0);
 
 		if(receiveSize <= 0) { // Connection 종료됨
+			std::cout.flush();
 			std::cout << "End connection. (" << session << ")" << endl;
 			break;
 		}
@@ -56,7 +58,6 @@ void ConnectedClient::Receive()
 		// 받은 내용을 분석
 		Process(buffer, receiveSize);
 	}
-
 	// 소켓 닫음
 	close(clientFd);
 	// 연결 종료 Callback함수 호출
@@ -66,7 +67,21 @@ void ConnectedClient::Receive()
 // 내용을 분석하는 함수
 void ConnectedClient::Process(const char* buf, int bufSize)
 {
-	std::cout << buf << endl;
+	json j = json::parse(buf);
+
+	string type = j["protocolType"];
+
+	if(type == "Protocol_FindUser") { // 유저 찾기
+		// 서칭큐에 넣어줌
+		mainSever->AddClientInSearchingQueue(this);
+	} else if(type == "Protocol_SendMessage") {
+		// 들어간 Room에 메시지 날려줌
+		Protocol_SendMessage p = Protocol_SendMessage::ToProtocol(buf);
+		room->SendMessage(p.message, this);
+	} else if(type == "Protocol_LeaveRoom") {
+		// 들어간 Room에게 방을 나간다고 말해줌
+		room->Exit(this);
+	}
 }
 
 // 클라이언트에게 데이터를 보내는 함수
@@ -95,8 +110,25 @@ bool ConnectedClient::isSessionExpired()
 	return false;
 }
 
+void ConnectedClient::EnterRoom(Room* room)
+{
+	this->room = room;
+}
+
 // 현재 상태를 가져오는 함수
 ConnectedClient::State ConnectedClient::GetState()
 {
 	return state;
+}
+
+// 현재 상태를 변경하는 함수
+void ConnectedClient::SetState(State state)
+{
+	this->state = state;
+}
+
+// 세션을 가져오는 함수
+string ConnectedClient::GetSession()
+{
+	return session;
 }
