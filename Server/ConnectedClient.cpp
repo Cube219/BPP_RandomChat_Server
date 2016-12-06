@@ -20,6 +20,8 @@ void ConnectedClient::Init(int fd, sockaddr_in6* addr, std::function<void(Connec
 	// 세션 id 생성 (uuid로 관리)
 	boost::uuids::uuid u = boost::uuids::random_generator()();
 	session = boost::uuids::to_string(u);
+
+	state = State::Idle;
 }
 
 // 시작 함수
@@ -91,4 +93,10 @@ bool ConnectedClient::isSessionExpired()
 		return false;
 		*/
 	return false;
+}
+
+// 현재 상태를 가져오는 함수
+ConnectedClient::State ConnectedClient::GetState()
+{
+	return state;
 }

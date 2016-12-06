@@ -6,6 +6,7 @@ using namespace std;
 class ConnectedClient
 {
 public:
+	enum State {Idle, Searching, Join, Expired};
 	ConnectedClient();
 	~ConnectedClient();
 
@@ -21,6 +22,9 @@ public:
 
 	// 세션이 만료되었는지 확인하는 함수
 	bool isSessionExpired();
+
+	// 현재 상태를 가져오는 함수
+	State GetState();
 
 private:
 
@@ -39,5 +43,7 @@ private:
 	sockaddr_in6* clientAddr;
 
 	thread* t;
+
+	State state;
 };
 
