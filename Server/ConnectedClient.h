@@ -29,6 +29,9 @@ public:
 	// 방에 들어왔다는 것을 알리는 함수
 	void EnterRoom(Room* room);
 
+	// 방에 나갔다는 것을 알리는 함수
+	void ExitRoom();
+
 	// 현재 상태를 가져오는 함수
 	State GetState();
 

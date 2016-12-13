@@ -23,6 +23,7 @@ void ConnectedClient::Init(MainServer* mainServer, int fd, sockaddr_in6* addr, s
 	session = boost::uuids::to_string(u);
 
 	state = State::Idle;
+	room = NULL;
 }
 
 // 시작 함수
@@ -57,6 +58,10 @@ void ConnectedClient::Receive()
 
 		// 받은 내용을 분석
 		Process(buffer, receiveSize);
+	}
+	// 혹시 방에 들어가 있으면 나옴
+	if(room != NULL) {
+		room->Exit(this);
 	}
 	// 소켓 닫음
 	close(clientFd);
@@ -110,9 +115,16 @@ bool ConnectedClient::isSessionExpired()
 	return false;
 }
 
+// 방에 들어왔다는 것을 알리는 함수
 void ConnectedClient::EnterRoom(Room* room)
 {
 	this->room = room;
+}
+// 방에 나갔다는 것을 알리는 함수
+void ConnectedClient::ExitRoom()
+{
+	state = State::Idle;
+	room = NULL;
 }
 
 // 현재 상태를 가져오는 함수

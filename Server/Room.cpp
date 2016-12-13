@@ -62,6 +62,8 @@ void Room::Exit(const ConnectedClient* client)
 {
 	c1->SetState(ConnectedClient::State::Idle);
 	c2->SetState(ConnectedClient::State::Idle);
+	c1->ExitRoom();
+	c2->ExitRoom();
 
 	// 상대방에게 방을 나갔다고 알림
 	Protocol_UserLeaved p;
